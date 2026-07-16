@@ -27,5 +27,32 @@ module serial_to_parallel
     // Note:
     // Check the waveform diagram in the README for better understanding.
 
+    logic [width - 1:0]  data_answer;
+    logic [$clog2(width):0]  bit_cnt;
+
+    assign parallel_valid = serial_valid && (bit_cnt == width - 1);
+    assign parallel_data  = parallel_valid ? { serial_data, data_answer[width - 1:1] } 
+                                           : data_answer;
+    
+    always_ff @ ( posedge clk )
+      if (rst) 
+      begin
+        data_answer  <= '0;
+        bit_cnt      <= '0;
+      end  
+      else 
+      begin
+        if (serial_valid) 
+        begin
+            data_answer <= { serial_data, data_answer[width - 1:1] };
+        
+            if (bit_cnt == width - 1) 
+                bit_cnt <=             '0;
+            else
+                bit_cnt <= bit_cnt + 1'b1;    
+        end
+      
+      end  
+
 
 endmodule

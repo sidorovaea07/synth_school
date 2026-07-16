@@ -29,5 +29,32 @@ module parallel_to_serial
     // Note:
     // Check the waveform diagram in the README for better understanding.
 
+    logic [width - 1:0]     shift_reg;
+    logic                   busy_answer;
+    logic [$clog2(width):0] bit_cnt;
+
+    assign busy         = (bit_cnt > 0);
+    assign serial_valid = parallel_valid || busy;
+    assign serial_data  = parallel_valid ? parallel_data[0] : (serial_valid ? shift_reg[0] : '0);
+    
+    always_ff @ ( posedge clk )
+      if (rst) 
+      begin
+        bit_cnt      <= '0;
+        shift_reg    <= '0;
+      end  
+      else 
+      begin
+        if (parallel_valid) begin
+            shift_reg <= parallel_data >> 1;
+            bit_cnt   <= width - 1;
+        end    
+        else if (busy) 
+        begin
+            shift_reg   <= shift_reg >> 1;
+            bit_cnt     <= bit_cnt - 1'b1;    
+        end
+      
+      end  
 
 endmodule

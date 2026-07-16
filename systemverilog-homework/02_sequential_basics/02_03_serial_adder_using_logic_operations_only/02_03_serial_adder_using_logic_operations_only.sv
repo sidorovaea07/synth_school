@@ -53,7 +53,8 @@ module serial_adder_using_logic_operations_only
   logic carry;
   wire carry_d;
 
-  assign { carry_d, sum } = a + b + carry;
+  assign sum = a ^ b ^ carry;
+  assign carry_d = (a & b) | (carry & (a ^ b));
 
   always_ff @ (posedge clk)
     if (rst)

@@ -23,5 +23,21 @@ module round_robin_arbiter_with_2_requests
     // requests -> 01 00 10 11 11 00 11 00 11 11
     // grants   -> 01 00 10 01 10 00 01 00 10 01
 
+ logic prty;   
+
+ assign grants[0] = requests[0] & ( ~ prty | ~ requests[1]);
+ assign grants[1] = requests[1] & (   prty | ~ requests[0]);
+ 
+ always_ff @( posedge clk ) 
+  if (rst) begin
+   prty <= '0;
+  end
+  else
+    case (grants)
+        2'b01: prty <= 1;
+        2'b10: prty <= 0;
+        default: ;
+    endcase
 
 endmodule
+
