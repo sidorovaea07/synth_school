@@ -25,5 +25,32 @@ module double_tokens
     // a -> 10010011000110100001100100
     // b -> 11011011110111111001111110
 
+    logic [$clog2(200) - 1:0] one_cnt, next_should_be_one;
+    assign overflow = one_cnt > 8'd200 ? 1 : 0; 
+
+    logic ans;
+    assign b = ans;
+
+    always_ff @(posedge clk)
+      if (rst) begin
+            next_should_be_one <=                            '0;
+            one_cnt            <=                            '0;
+      end    
+      else 
+        if (a) begin
+            next_should_be_one <=     next_should_be_one + 1'b1;
+            one_cnt            <=                one_cnt + 1'b1;
+            ans                <=                            '1;
+        end
+        else if (next_should_be_one) begin
+            ans                <=                            '1;
+            next_should_be_one <= next_should_be_one - 1'b1 + a;
+            one_cnt            <=                            '0;
+        end
+        else begin
+            ans                <=                            '0;
+            one_cnt            <=                            '0;
+        end
+
 
 endmodule
