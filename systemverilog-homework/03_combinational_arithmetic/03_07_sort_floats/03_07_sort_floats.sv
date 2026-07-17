@@ -86,5 +86,72 @@ module sort_three_floats (
     // The FLEN parameter is defined in the "import/preprocessed/cvw/config-shared.vh" file
     // and usually equal to the bit width of the double-precision floating-point number, FP64, 64 bits.
 
+    logic a_less_or_equal_b, b_less_or_equal_c, a_less_or_equal_c;
+    
+    wire err1, err2, err3;
+    assign err = err1 | err2 | err3;
+
+    f_less_or_equal i1_floe (
+        .a   ( unsorted[0]       ),
+        .b   ( unsorted[1]       ),
+        .res ( a_less_or_equal_b ),
+        .err ( err1               )
+    );
+
+    f_less_or_equal i2_floe (
+        .a   ( unsorted[1]       ),
+        .b   ( unsorted[2]       ),
+        .res ( b_less_or_equal_c ),
+        .err ( err2               )
+    );
+
+    f_less_or_equal i3_floe (
+        .a   ( unsorted[0]       ),
+        .b   ( unsorted[2]       ),
+        .res ( a_less_or_equal_c ),
+        .err ( err3               )
+    );
+
+    always_comb begin : a_b_c_compare
+        if (a_less_or_equal_b) begin
+            if (b_less_or_equal_c) begin
+                sorted[0] = unsorted[0];
+                sorted[1] = unsorted[1];
+                sorted[2] = unsorted[2];
+            end
+            else begin
+                if (a_less_or_equal_c) begin
+                    sorted[0] = unsorted[0];
+                    sorted[1] = unsorted[2];
+                    sorted[2] = unsorted[1];
+                end
+                else begin
+                    sorted[0] = unsorted[2];
+                    sorted[1] = unsorted[0];
+                    sorted[2] = unsorted[1];
+                end
+            end
+        end
+        else begin
+            if (~ b_less_or_equal_c) begin
+                sorted[0] = unsorted[2];
+                sorted[1] = unsorted[1];
+                sorted[2] = unsorted[0];
+            end
+            else begin
+                if (a_less_or_equal_c) begin
+                    sorted[0] = unsorted[1];
+                    sorted[1] = unsorted[0];
+                    sorted[2] = unsorted[2];
+                end
+                else begin
+                    sorted[0] = unsorted[1];
+                    sorted[1] = unsorted[2];
+                    sorted[2] = unsorted[0];
+                end
+            end
+        end             
+
+    end
 
 endmodule
