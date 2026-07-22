@@ -43,5 +43,88 @@ module sqrt_formula_distributor
     // Instantiate sufficient number of "formula_1_impl_1_top", "formula_1_impl_2_top",
     // or "formula_2_top" modules to achieve desired performance.
 
+    parameter N = 50;
+
+    logic [N - 1:0][31:0] a_r, b_r, c_r, y_r;
+    logic [N - 1:0]    up_vld, down_vld, sel;
+    logic [31:0]                       res_r;
+    logic                              vld_r;
+
+    assign res_vld = vld_r;;
+    assign res     = res_r;
+
+    always_ff @(posedge clk) begin          // Counter
+        if (rst)
+            sel <= 1'b1;
+        else if (arg_vld)
+            sel <= {sel[N-2:0], sel[N-1]};
+    end
+
+    always_ff @(posedge clk) begin          // Registers
+        if (rst) begin
+            a_r    <= '0;
+            b_r    <= '0;
+            c_r    <= '0;
+            up_vld <= '0;           
+        end
+        else begin
+            for (int i = 0; i < N; i ++) begin
+                if (arg_vld && sel[i]) begin
+                    a_r[i]    <=  a;
+                    b_r[i]    <=  b;
+                    c_r[i]    <=  c;
+                    up_vld[i] <= '1;
+                end
+                else 
+                    up_vld[i] <= '0;
+            end
+        end
+    end    
+
+    generate                                // Instances
+        for (genvar i = 0; i < N; i ++) begin: gen2
+            if (formula == 2)
+                formula_2_top inst1 (
+                    .clk ( clk ),
+                    .rst ( rst ),
+                    .arg_vld ( up_vld[i] ),
+                    .a   ( a_r[i] ),
+                    .b   ( b_r[i] ),
+                    .c   ( c_r[i] ),
+                    .res_vld ( down_vld[i] ),
+                    .res ( y_r[i] )
+                );
+            else if (impl == 1)
+                formula_1_impl_1_top inst2 (
+                    .clk ( clk ),
+                    .rst ( rst ),
+                    .arg_vld ( up_vld[i] ),
+                    .a   ( a_r[i] ),
+                    .b   ( b_r[i] ),
+                    .c   ( c_r[i] ),
+                    .res_vld ( down_vld[i] ),
+                    .res ( y_r[i] )
+                );
+            else
+                formula_1_impl_2_top inst3 (
+                    .clk ( clk ),
+                    .rst ( rst ),
+                    .arg_vld ( up_vld[i] ),
+                    .a   ( a_r[i] ),
+                    .b   ( b_r[i] ),
+                    .c   ( c_r[i] ),
+                    .res_vld ( down_vld[i] ),
+                    .res ( y_r[i] )
+                );       
+        end    
+    endgenerate
+
+    always_ff @(posedge clk) begin          // Output logic
+        vld_r <= | down_vld;        
+        for (int i = 0; i < N; i ++) begin
+            if (down_vld[i])
+                res_r <= y_r[i];
+        end
+    end
 
 endmodule
