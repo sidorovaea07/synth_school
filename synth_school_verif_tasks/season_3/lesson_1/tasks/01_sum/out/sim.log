@@ -1,0 +1,31 @@
+# Reading pref.tcl
+# //  Questa Altera Starter FPGA Edition-64
+# //  Version 2025.2 win64 May 31 2025
+# //
+# // Unpublished work. Copyright 2025 Siemens
+# //
+# // This material contains trade secrets or otherwise confidential information
+# // owned by Siemens Industry Software Inc. or its affiliates (collectively,
+# // "SISW"), or its licensors. Access to and use of this information is strictly
+# // limited as set forth in the Customer's applicable agreements with SISW.
+# //
+# // This material may not be copied, distributed, or otherwise disclosed outside
+# // of the Customer's facilities without the express written permission of SISW,
+# // and may not be used in any way not expressly authorized by SISW.
+# //
+# ** Note: (vsim-220) 'modelsim.ini' is used as the ini file.
+# vsim -gui work.testbench -do "questa.tcl" -voptargs="+acc" -l 01_sum/out/sim.log -wlf 01_sum/out/sim.wlf 
+# Start time: 22:52:59 on Jul 28,2026
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# ** Warning: (vopt-10908) Some optimizations are turned off because the +acc switch is in effect.
+# ** Note: (vopt-220) 'modelsim.ini' is used as the ini file.
+# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=1.
+# Loading sv_std.std
+# Loading work.testbench(fast)
+# Loading work.sum(fast)
+# ** Error: Failure to checkout svverification license feature.
+# ** Error: (vsim-1) Unable to checkout verification license - required for testbench features (randomize, randcase, randsequence, covergroup).
+#    Time: 0 ps  Iteration: 0  Instance: /testbench File: 01_sum/testbench.sv
+# Error loading design
+# End time: 22:53:03 on Jul 28,2026, Elapsed time: 0:00:04
+# Errors: 2, Warnings: 1

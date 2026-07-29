@@ -1,0 +1,17 @@
+** Warning: (vlib-34) Library already exists at "01_sum/out/work".
+Errors: 0, Warnings: 1
+Questa Altera Starter FPGA Edition-64 vmap 2025.2 Lib Mapping Utility 2025.05 May 31 2025
+vmap work 01_sum/out/work 
+** Note: (vmap-220) 'modelsim.ini' is used as the ini file.
+Modifying modelsim.ini
+Questa Altera Starter FPGA Edition-64 vlog 2025.2 Compiler 2025.05 May 31 2025
+Start time: 22:52:44 on Jul 28,2026
+vlog -sv -work work 01_sum/sum.sv 01_sum/testbench.sv 01_sum/out/EXT_POSTFIX.none 
+** Note: (vlog-220) 'modelsim.ini' is used as the ini file.
+-- Compiling module sum
+-- Compiling module testbench
+
+Top level modules:
+	testbench
+End time: 22:52:45 on Jul 28,2026, Elapsed time: 0:00:01
+Errors: 0, Warnings: 0
