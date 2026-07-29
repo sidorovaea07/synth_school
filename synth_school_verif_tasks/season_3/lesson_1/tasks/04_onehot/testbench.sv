@@ -4,7 +4,7 @@ module testbench;
 
     // 5-битный входной сигнал
     logic [5:0] bin;
-
+    // testing
     // TODO:
     // Определите разрядность выходного
     // one-hot сигнала
